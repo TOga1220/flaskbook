@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>問い合わせ完了</title>
+        <link 
+        rel="stylesheet"
+        href="{{ url_for("static", filename='style.css') }}"
+        />
+    </head>
+
+    <body>
+        <p>{{ username }} さま</p>
+        <p>問い合わせありがとうございました。問い合わせ内容はこちらです。</p>
+        <p>問い合わせ内容</p>
+        <p>{{ description }}</p>
+        
+    </body>
+</html>
