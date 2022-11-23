@@ -1,11 +1,14 @@
 from datetime import datetime
 
+from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 
+# インスタンス化
 db=SQLAlchemy()
+login_maneger = LoginManager()
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -25,3 +28,19 @@ class User(db.Model):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
+        
+    # パスワードをチェックする
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
+    # メールアドレス重複をチェックする
+    def is_duplicate_email(self):
+        return User.query.filter_by(email = self.email).first() is not None
+
+# ログインしているユーザ情報を取得する
+@login_maneger.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+    
+    
+    
