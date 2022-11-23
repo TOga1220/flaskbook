@@ -1,29 +1,22 @@
-import os
-from pathlib import Path
-
 from flask import Flask
 from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from flask_wtf.csrf import CSRFProtect
 
+from apps.config import config
 from apps.crud import views as cruds_view
+from apps.crud.models import db
 
-# SQLAlchemyをインスタンス化する
-db=SQLAlchemy()
+csrf = CSRFProtect()
 
-base_dir = Path(__file__).parent.parent
-SECRET_KEY = "key"
-SQLALCHEMY_DATABASE_URI = "sqlite:///local.sqlite"
-
-
-def create_app():
+def create_app(config_key):
     app = Flask(__name__)
-
+    
     # アプリのコンフィグ設定をする
-    app.config.from_mapping(
-        SECRET_KEY = SECRET_KEY,
-        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI,
-        SQLALCHEMY_TRACK_MODIFICATIONS=False,
-    )
+    # config_keyにマッチする環境のconfigクラスを読み込む
+    app.config.from_object(config[config_key])  
+    
+    csrf.init_app(app)
+    
     # SQLALCHEMYと連携する
     db.init_app(app)
     # MIGRATEアプリを連携する
