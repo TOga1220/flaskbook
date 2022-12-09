@@ -7,6 +7,7 @@ from apps.auth import views as auths_view
 from apps.config import config
 from apps.crud import views as cruds_view
 from apps.crud.models import db, login_maneger
+from apps.detector import views as dt_views
 
 # インスタンス化
 csrf = CSRFProtect()
@@ -35,6 +36,9 @@ def create_app(config_key):
     
     # register_blueprintを使用しviewsのauthをアプリへ登録する
     app.register_blueprint(auths_view.auth, url_prefix="/auth")
+    
+    # register_blueprintを使用しviewsのdetectorをアプリへ登録する
+    app.register_blueprint(dt_views.dt)
     
     return app
 
