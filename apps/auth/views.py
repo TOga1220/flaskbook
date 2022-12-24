@@ -1,8 +1,9 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_user, logout_user
 
+from apps.app import db
 from apps.auth.forms import LoginForm, SignUpForm
-from apps.crud.models import User, db
+from apps.crud.models import User
 
 # Blueprintを使ってauthを生成する
 auth = Blueprint("auth", __name__, template_folder="templates", static_folder="static")

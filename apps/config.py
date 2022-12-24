@@ -1,6 +1,6 @@
 from pathlib import Path
 
-basedir = Path(__file__).parent
+basedir = Path(__file__).parent.parent
 
 ## BaseConfigクラスを作成する
 class BaseConfig:
@@ -9,14 +9,14 @@ class BaseConfig:
     
 #BaseConfigクラスを継承してLocalConfigクラスを作成する
 class LocalConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///local.sqlite"
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{basedir / 'local.sqlite'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
     
 class TestingConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///testing.sqlite"
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{basedir / 'testing.sqlite'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_ECHO = False
+    WTF_CSRF_ENABLED = False
     
 # config辞書にマッピング
 config = {

@@ -1,8 +1,9 @@
 from flask import Blueprint, redirect, render_template, url_for
 from flask_login import login_required
 
+from apps.app import db
 from apps.crud.forms import UserForm
-from apps.crud.models import User, db
+from apps.crud.models import User
 
 # Blueprintでcrudアプリを生成
 crud = Blueprint(

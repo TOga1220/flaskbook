@@ -1,12 +1,10 @@
 from datetime import datetime
 
-from flask_login import LoginManager, UserMixin
-from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
-# インスタンス化
-db=SQLAlchemy()
-login_maneger = LoginManager()
+from apps.app import db, login_manager
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -17,7 +15,9 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
-     
+    
+    # backrefを利用し、relation情報を設定する
+    user_images = db.relationship("UserImage", backref = "user")
      
     # パスワードリセットするためのプロパティ
     @property
@@ -38,7 +38,7 @@ class User(db.Model, UserMixin):
         return User.query.filter_by(email = self.email).first() is not None
 
 # ログインしているユーザ情報を取得する
-@login_maneger.user_loader
+@login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
     
